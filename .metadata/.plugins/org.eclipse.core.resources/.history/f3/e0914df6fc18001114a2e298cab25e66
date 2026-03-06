@@ -1,0 +1,62 @@
+package com.gcu.controllers;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import org.springframework.validation.BindingResult;
+import jakarta.validation.Valid;
+
+import com.gcu.models.CharacterModel;
+
+@Controller
+public class CharactersController
+{
+	
+	private static int nextId = 1;
+	
+    // Temporary in-memory list (replace with DB later)
+    private static final List<CharacterModel> characters = new ArrayList<>();
+
+    // Seed data (runs once)
+    static
+    {
+        characters.add(new CharacterModel(nextId++, "Arthas", "Human", "Knight", 5, "Player", "Male"));
+        characters.add(new CharacterModel(nextId++, "Lyra", "Elf", "Ranger", 4, "Player", "Female"));
+        characters.add(new CharacterModel(nextId++, "Thorgar", "Dwarf", "Warrior", 6, "NPC", "Male"));
+        characters.add(new CharacterModel(nextId++, "Mira", "Human", "Wizard", 3, "Player", "Female"));
+    }
+
+    @GetMapping("/characters")
+    public String characters(Model model)
+    {
+        model.addAttribute("characters", characters);
+        return "characters";
+    }
+
+    @GetMapping("/characters/create")
+    public String showCreateForm(Model model)
+    {
+        model.addAttribute("character", new CharacterModel());
+        return "create-character";
+    }
+
+    @PostMapping("/characters/create")
+    public String createCharacter(@Valid @ModelAttribute("character") CharacterModel character,
+                                  BindingResult bindingResult)
+    {
+        if (bindingResult.hasErrors())
+        {
+            return "create-character";
+        }
+
+        character.setId(nextId++);
+        characters.add(character);
+        return "redirect:/characters";
+    }
+}
