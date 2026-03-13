@@ -5,14 +5,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import com.gcu.business.CharacterService;
+import com.gcu.business.CharacterDatabaseService;
 import com.gcu.models.CharacterModel;
 
 @Controller
 public class CharactersController
 {
     @Autowired
-    private CharacterService characterService;
+    private CharacterDatabaseService characterService;
 
     @GetMapping("/characters")
     public String characters(Model model)
