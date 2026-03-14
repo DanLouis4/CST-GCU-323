@@ -6,13 +6,21 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import com.gcu.business.CharacterDatabaseService;
-import com.gcu.models.CharacterModel;
+import com.gcu.models.CharacterEntity;
+import com.gcu.business.RaceDatabaseService;
+import com.gcu.business.ClassDatabaseService;
 
 @Controller
 public class CharactersController
 {
     @Autowired
     private CharacterDatabaseService characterService;
+
+    @Autowired
+    private RaceDatabaseService raceService;
+
+    @Autowired
+    private ClassDatabaseService classService;
 
     @GetMapping("/characters")
     public String characters(Model model)
@@ -24,12 +32,15 @@ public class CharactersController
     @GetMapping("/characters/create")
     public String showCreateForm(Model model)
     {
-        model.addAttribute("character", new CharacterModel());
+        model.addAttribute("character", new CharacterEntity());
+        model.addAttribute("races", raceService.getAllRaces());
+        model.addAttribute("classes", classService.getAllClasses());
+
         return "create-character";
     }
 
     @PostMapping("/characters/create")
-    public String createCharacter(@ModelAttribute("character") CharacterModel character)
+    public String createCharacter(@ModelAttribute("character") CharacterEntity character)
     {
         characterService.addCharacter(character);
         return "redirect:/characters";
@@ -38,7 +49,7 @@ public class CharactersController
     @GetMapping("/characters/edit/{id}")
     public String showEditForm(@PathVariable int id, Model model)
     {
-        CharacterModel character = characterService.findById(id);
+        CharacterEntity character = characterService.findById(id);
 
         if (character == null)
         {
@@ -46,11 +57,14 @@ public class CharactersController
         }
 
         model.addAttribute("character", character);
+        model.addAttribute("races", raceService.getAllRaces());
+        model.addAttribute("classes", classService.getAllClasses());
+
         return "edit-character";
-    }
+}
 
     @PostMapping("/characters/edit")
-    public String updateCharacter(@ModelAttribute("character") CharacterModel character)
+    public String updateCharacter(@ModelAttribute("character") CharacterEntity character)
     {
         characterService.updateCharacter(character);
         return "redirect:/characters";

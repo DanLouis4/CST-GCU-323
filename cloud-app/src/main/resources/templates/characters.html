@@ -33,22 +33,22 @@
     <tbody>
         <tr th:each="c : ${characters}">
             <td th:text="${c.characterName}"></td>
-            <td th:text="${c.characterRace}"></td>
-            <td th:text="${c.characterClass}"></td>
+            <td th:text="${c.race.raceName}"></td>
+            <td th:text="${c.characterClass.className}"></td>
             <td th:text="${c.characterLevel}"></td>
-            <td th:text="${c.characterType}"></td>
+            <td th:text="${c.characterDescription}"></td>
             <td th:text="${c.characterGender}"></td>
 			<td class="text-nowrap">
 
 			    <a class="btn btn-sm btn-outline-success"
 				   title="Edit Character"
-			       th:href="@{/characters/edit/{id}(id=${c.id})}">
+			       th:href="@{/characters/edit/{id}(id=${c.characterId})}">
 			        <i class="bi bi-pencil-fill"></i>
 			    </a>
 
 			    <a class="btn btn-sm btn-outline-danger ms-2"
 				   title="Delete Character"
-			       th:href="@{/characters/delete/{id}(id=${c.id})}"
+			       th:href="@{/characters/delete/{id}(id=${c.characterId})}"
 			       onclick="return confirm('Delete this character?');">
 			        <i class="bi bi-trash-fill"></i>
 			    </a>

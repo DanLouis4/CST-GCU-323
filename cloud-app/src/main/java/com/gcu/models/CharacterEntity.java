@@ -51,12 +51,14 @@ public class CharacterEntity
 
     @ManyToOne
     @JoinColumn(name = "class_id", nullable = false)
-    private ClassEntity characterClass; // Renamed to characterClass to avoid conflict with reserved keyword "class"
+    private ClassEntity characterClass; 
 
+    // Default constructor
     public CharacterEntity()
     {
     }
 
+    /* Getter and Setter methods for the non-relational fields */
     public Integer getCharacterId()
     {
         return characterId;
@@ -107,36 +109,7 @@ public class CharacterEntity
         this.characterDescription = characterDescription;
     }
 
-    public String getImageUrl()
-    {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl)
-    {
-        this.imageUrl = imageUrl;
-    }
-
-    public LocalDateTime getCreatedOn()
-    {
-        return createdOn;
-    }
-
-    public void setCreatedOn(LocalDateTime createdOn)
-    {
-        this.createdOn = createdOn;
-    }
-
-    public LocalDateTime getUpdatedOn()
-    {
-        return updatedOn;
-    }
-
-    public void setUpdatedOn(LocalDateTime updatedOn)
-    {
-        this.updatedOn = updatedOn;
-    }
-
+    /* Getter and Setter methods for the relational fields */
     public UserEntity getUser()
     {
         return user;
@@ -146,7 +119,7 @@ public class CharacterEntity
     {
         this.user = user;
     }
-
+    
     public RaceEntity getRace()
     {
         return race;
@@ -156,14 +129,47 @@ public class CharacterEntity
     {
         this.race = race;
     }
-
+    
     public ClassEntity getCharacterClass()
     {
         return characterClass;
     }
-
+    
     public void setCharacterClass(ClassEntity characterClass)
     {
         this.characterClass = characterClass;
     }
+
+    /* Getter and Setter methods for the image URL field */
+    public String getImageUrl()
+    {
+        return imageUrl;
+    }
+    
+    public void setImageUrl(String imageUrl)
+    {
+        this.imageUrl = imageUrl;
+    }
+    
+    /* Getter and Setter methods for the created and updated timestamps */
+    public LocalDateTime getCreatedAt()
+    {
+        return createdOn;
+    }
+    
+    public void setCreatedAt(LocalDateTime createdOn)
+    {
+        this.createdOn = createdOn;
+    }
+    
+    public LocalDateTime getUpdatedAt()
+    {
+        return updatedOn;
+    }
+    
+    public void setUpdatedAt(LocalDateTime updatedOn)
+    {
+        this.updatedOn = updatedOn;
+    }
+
 }

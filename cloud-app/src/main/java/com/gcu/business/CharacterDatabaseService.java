@@ -1,6 +1,6 @@
 package com.gcu.business;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,7 +11,6 @@ import com.gcu.data.ClassRepository;
 import com.gcu.data.RaceRepository;
 import com.gcu.data.UserRepository;
 import com.gcu.models.CharacterEntity;
-import com.gcu.models.CharacterModel;
 import com.gcu.models.ClassEntity;
 import com.gcu.models.RaceEntity;
 import com.gcu.models.UserEntity;
@@ -36,63 +35,54 @@ public class CharacterDatabaseService
         this.classRepository = classRepository;
     }
 
-    public List<CharacterModel> getAllCharacters()
+    public List<CharacterEntity> getAllCharacters()
     {
-        List<CharacterModel> models = new ArrayList<>();
-        List<CharacterEntity> entities = characterRepository.findAll();
-
-        for (CharacterEntity entity : entities)
-        {
-            models.add(toModel(entity));
-        }
-
-        return models;
+        return characterRepository.findAll();
     }
 
-    public CharacterModel findById(int id)
+    public CharacterEntity findById(int id)
     {
         Optional<CharacterEntity> entity = characterRepository.findById(id);
-        return entity.map(this::toModel).orElse(null);
+        return entity.orElse(null);
     }
 
-    public void addCharacter(CharacterModel model)
+    public void addCharacter(CharacterEntity character)
     {
-        CharacterEntity entity = new CharacterEntity();
-
-        entity.setCharacterName(model.getCharacterName());
-        entity.setCharacterLevel(model.getCharacterLevel());
-        entity.setCharacterGender(model.getCharacterGender());
-        entity.setCharacterDescription(model.getCharacterType()); // temporary placeholder
-
         UserEntity user = userRepository.findById(1).orElse(null);
-        RaceEntity race = raceRepository.findByRaceName(model.getCharacterRace());
-        ClassEntity clazz = classRepository.findByClassName(model.getCharacterClass());
+        RaceEntity race = raceRepository.findById(character.getRace().getRaceId()).orElse(null);
+        ClassEntity charClass = classRepository.findById(character.getCharacterClass().getClassId()).orElse(null);
 
-        entity.setUser(user);
-        entity.setRace(race);
-        entity.setCharacterClass(clazz);
+        character.setUser(user);
+        character.setRace(race);
+        character.setCharacterClass(charClass);
 
-        characterRepository.save(entity);
+        character.setCreatedAt(LocalDateTime.now());
+        character.setUpdatedAt(LocalDateTime.now());
+
+        characterRepository.save(character);
     }
 
-    public void updateCharacter(CharacterModel model)
+    public void updateCharacter(CharacterEntity character)
     {
-        Optional<CharacterEntity> optionalEntity = characterRepository.findById(model.getId());
+        Optional<CharacterEntity> optionalEntity = characterRepository.findById(character.getCharacterId());
 
         if (optionalEntity.isPresent())
         {
             CharacterEntity entity = optionalEntity.get();
 
-            entity.setCharacterName(model.getCharacterName());
-            entity.setCharacterLevel(model.getCharacterLevel());
-            entity.setCharacterGender(model.getCharacterGender());
-            entity.setCharacterDescription(model.getCharacterType()); // temporary placeholder
+            entity.setCharacterName(character.getCharacterName());
+            entity.setCharacterLevel(character.getCharacterLevel());
+            entity.setCharacterGender(character.getCharacterGender());
+            entity.setCharacterDescription(character.getCharacterDescription());
+            entity.setImageUrl(character.getImageUrl());
 
-            RaceEntity race = raceRepository.findByRaceName(model.getCharacterRace());
-            ClassEntity clazz = classRepository.findByClassName(model.getCharacterClass());
+            RaceEntity race = raceRepository.findById(character.getRace().getRaceId()).orElse(null);
+            ClassEntity charClass = classRepository.findById(character.getCharacterClass().getClassId()).orElse(null);
 
             entity.setRace(race);
-            entity.setCharacterClass(clazz);
+            entity.setCharacterClass(charClass);
+
+            entity.setUpdatedAt(LocalDateTime.now());
 
             characterRepository.save(entity);
         }
@@ -101,22 +91,5 @@ public class CharacterDatabaseService
     public void deleteCharacter(int id)
     {
         characterRepository.deleteById(id);
-    }
-
-    private CharacterModel toModel(CharacterEntity entity)
-    {
-        CharacterModel model = new CharacterModel();
-
-        model.setId(entity.getCharacterId());
-        model.setCharacterName(entity.getCharacterName());
-        model.setCharacterRace(entity.getRace() != null ? entity.getRace().getRaceName() : "");
-        model.setCharacterClass(entity.getCharacterClass() != null ? entity.getCharacterClass().getClassName() : "");
-        model.setCharacterLevel(entity.getCharacterLevel());
-        model.setCharacterGender(entity.getCharacterGender());
-
-        // temporary mapping until I refactor the form properly
-        model.setCharacterType(entity.getCharacterDescription() != null ? entity.getCharacterDescription() : "");
-
-        return model;
     }
 }
