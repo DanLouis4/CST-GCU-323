@@ -2,8 +2,12 @@
     "java.compile.nullAnalysis.mode": "automatic",
     "java.configuration.updateBuildConfiguration": "interactive",
     "cSpell.words": [
+        "Ailberty",
         "Arthas",
+        "Djava",
+        "Dserver",
         "Thorgar",
-        "thymeleaf"
+        "thymeleaf",
+        "wwwroot"
     ]
 }
