@@ -29,6 +29,9 @@ public class CharacterEntity
     @Column(name = "character_gender", nullable = false)
     private String characterGender;
 
+    @Column(name = "character_type", nullable = false)
+    private String characterType;
+
     @Column(name = "character_description")
     private String characterDescription;
 
@@ -107,6 +110,16 @@ public class CharacterEntity
     public void setCharacterDescription(String characterDescription)
     {
         this.characterDescription = characterDescription;
+    }
+
+    public String getCharacterType()
+    {
+        return characterType;
+    }
+
+    public void setCharacterType(String characterType)
+    {
+        this.characterType = characterType;
     }
 
     /* Getter and Setter methods for the relational fields */

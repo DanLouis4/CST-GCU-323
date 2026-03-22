@@ -29,6 +29,19 @@ public class CharactersController
         return "characters";
     }
 
+    @GetMapping("/characters/view/{id}")
+    public String viewCharacter(@PathVariable int id, Model model)
+    {
+        CharacterEntity character = characterService.findById(id);
+        if (character == null)
+        {
+            return "redirect:/characters";
+        }
+
+        model.addAttribute("character", character);
+        return "view-character";
+    }
+
     @GetMapping("/characters/create")
     public String showCreateForm(Model model)
     {

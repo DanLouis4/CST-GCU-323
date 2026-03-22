@@ -73,6 +73,7 @@ public class CharacterDatabaseService
             entity.setCharacterName(character.getCharacterName());
             entity.setCharacterLevel(character.getCharacterLevel());
             entity.setCharacterGender(character.getCharacterGender());
+            entity.setCharacterType(character.getCharacterType());
             entity.setCharacterDescription(character.getCharacterDescription());
             entity.setImageUrl(character.getImageUrl());
 
